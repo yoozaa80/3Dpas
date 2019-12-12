@@ -1,0 +1,11 @@
+# rectangle 4 x 4 @ 0, 0
+
+# ln2 = line2d x1,y1,x2,y2;
+# ln3 = line3d x1,y1,z1,x2,y2,z2;
+
+ln2 0, 0, 0, 2;
+ln2 0, 0, 2, 0;
+
+ln2 2, 2, 2, 0;
+ln2 2, 2, 0, 2;
+
