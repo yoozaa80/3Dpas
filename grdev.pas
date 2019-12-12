@@ -1,20 +1,20 @@
 (*
-  Level.1 Graphics Library
-
-  Unit GraphDevice
-  Complete graphics device I/O implementation
-
-  6 Sep 98 - ndc - created.
-
-  notes:
-  	DC = device coordinates (device - pixels)
-  	NDC = normal device coordinates (range 0..1 - lx, ly)
-		example: in 640x480 the point(0.5, 0.5) in NDC = 320, 240 pixels (DC)
-	WDC = world device coordinates (range unlimited)
-		example: in 10m x 6m the point(5, 5) in WDC = 0.5, 0.8333 (NDC)
-
-	window = the window on screen (in NDC)
-  	viewport = the visible rect in WDC
+**  Low-level 2D Graphics Library
+**
+**  Unit GraphDevice
+**  Complete graphics device I/O implementation
+**
+**  6 Sep 98 - ndc - created.
+**
+**  Notes:
+**  DC = device coordinates (device - pixels)
+**  NDC = normal device coordinates (range 0..1 - lx, ly)
+**      example: in 640x480 the point(0.5, 0.5) in NDC = 320, 240 pixels (DC)
+**  WDC = world device coordinates (range unlimited)
+**      example: in 10m x 6m the point(5, 5) in WDC = 0.5, 0.8333 (NDC)
+**
+**  window = the window on screen (in NDC)
+**  viewport = the visible rect in WDC
 *)
 
 Unit GrDev;	(* 8 letters for DOS (unit = filename) *)
@@ -22,33 +22,24 @@ Unit GrDev;	(* 8 letters for DOS (unit = filename) *)
 (* ========================================================================== *)
 Interface
 
-(*
-	RectType, rectangle
-*)
+(* RectType, rectangle *)
 Type RectType = Record
-		l, t, r, b : Real; (* (l)eft, (t)op, (r)ight, (b)ottom *)
+    l, t, r, b : Real; (* (l)eft, (t)op, (r)ight, (b)ottom *)
 	end;
 
-(*
-	ColorType, color
-*)
+(* ColorType, color *)
 Type ColorType = Record
-		r, g, b : Real;	(* red, green, blue - range 0.0 .. 1.0 *)
-
-		devColor : Integer;	(* hidden property - the device color (COLORREF or/and HPEN for Windows) *)
+    r, g, b : Real;	(* red, green, blue - range 0.0 .. 1.0 *)
+    devColor : Integer;	(* hidden property - the device color (COLORREF or/and HPEN for Windows) *)
 	end;
 
-(*
-	PenType, the pen
-*)
+(* PenType, the pen *)
 Type PenType = Record
-		color : ColorType;	(* the color *)
-		width : Real;			(* width in WDC *)
+    color : ColorType;	(* the color *)
+	width : Real;			(* width in WDC *)
 	end;
 
-(*
-	WindowType, window
-*)
+(* WindowType, window *)
 Type WindowType = Record
 		dc    : RectType;	(* coordinates (in NDC) *)
 		wdc   : RectType;	(* world coordinates *)
@@ -58,9 +49,9 @@ Type WindowType = Record
 		IsotropicL : Real;		(* x/y correction *)
 
 		(* HIDDEN *)
-		drc	: RectType;	(* the window in DC *)
-		lx, ly : Real;		(* wdc->dc *)
-		sx, sy : Real;
+		drc	: RectType;   (* the window in DC *)
+		lx, ly : Real;    (* wdc->dc *)
+		sx, sy : Real;    (* origin *)
 	end;
 
 Procedure gdInitDevice;		(* Initialization *)
@@ -87,11 +78,10 @@ Procedure gdText(x, y : Real; text : String);		(* Draw text *)
 Function  gdTextHeight(text : String) : Real;		(* Returns the height of the text in WDC *)
 Function  gdTextWidth (text : String) : Real;		(*	Returns the width of the text in WDC *)
 
-(* ========================================================================== *)
 Implementation
-Uses Graph;
+(* --- Υλοποίηση --- *)
 
-(* === Global module variables/constants ==================================== *)
+Uses Graph;
 
 Const MaxPen = 15;	(* The maximum number of pens *)
 Const MaxWin = 7;		(* The maximum number of windows *)
@@ -114,10 +104,8 @@ Var
 	w2d_lx, w2d_ly : Real;	(* WDC->DC *)
 	w2d_sx, w2d_sy : Real;	(* WDC->DC starting pos *)
 
-(* ========================================================================== *)
-
 (*
-	Error handling - displays the message 'msg' and exits
+**	Error handling - displays the message 'msg' and exits
 *)
 Procedure gdError(msg : String);
 Begin
@@ -128,7 +116,7 @@ Begin
 End;
 
 (*
-	Initialize module
+**	Initialize module
 *)
 Procedure gdInitDevice;
 Var
@@ -198,7 +186,7 @@ Begin
 End;
 
 (*
-	Release allocated memory, and restores the crt mode.
+**	Release allocated memory, and restores the crt mode.
 *)
 Procedure gdCloseDevice;
 Begin
@@ -206,7 +194,7 @@ Begin
 End;
 
 (*
-	fills the rect with the values x1..y2
+**	fills the rect with the values x1..y2
 *)
 Procedure gdMakeRect(x1, y1, x2, y2 : Real; VAR rect : RectType);
 Begin
@@ -217,7 +205,7 @@ Begin
 End;
 
 (*
-	Converts coordinates from NDC to DC (Normal Device Coordinates TO Device Coordinates)
+**	Converts coordinates from NDC to DC (Normal Device Coordinates TO Device Coordinates)
 *)
 Procedure NdcToDC(wx, wy : Real; VAR dev_x : Integer; VAR dev_y : Integer);
 Begin
@@ -226,7 +214,7 @@ Begin
 End;
 
 (*
-	Converts coordinates from WDC to DC (World Device Coordinates TO Device Coordinates)
+**	Converts coordinates from WDC to DC (World Device Coordinates TO Device Coordinates)
 *)
 Procedure WdcToDC(wx, wy : Real; VAR dev_x : Integer; VAR dev_y : Integer);
 Begin
@@ -293,7 +281,7 @@ Begin
 End;
 
 (*
-	Returns the maximum number of supported pens
+**	Returns the maximum number of supported pens
 *)
 Function gdGetMaxPen : Integer;
 Begin
@@ -301,7 +289,7 @@ Begin
 End;
 
 (*
-	Sets the pen data
+**	Sets the pen data
 *)
 Procedure gdSetPenData(pen : Integer; pen_data : PenType);
 Begin
@@ -312,7 +300,7 @@ Begin
 End;
 
 (*
-	Returns the pen data
+**	Returns the pen data
 *)
 Procedure gdGetPenData(pen : Integer; VAR pen_data : PenType);
 Begin
@@ -323,7 +311,7 @@ Begin
 End;
 
 (*
-	Selects the current pen (current color)
+**	Selects the current pen (current color)
 *)
 Procedure gdSelectPen(pen : Integer);
 Begin
@@ -340,7 +328,7 @@ Begin
 End;
 
 (*
-	draw a line
+**	draw a line
 *)
 Procedure gdLine(x1, y1, x2, y2 : Real);
 Var
@@ -354,7 +342,7 @@ Begin
 End;
 
 (*
-	draw a rectangle
+**	draw a rectangle
 *)
 Procedure gdRect(rc : RectType);
 Begin
@@ -365,7 +353,7 @@ Begin
 End;
 
 (*
-	draw text
+**	draw text
 *)
 Procedure gdText(x, y : Real; text : String);
 Var
@@ -377,7 +365,7 @@ Begin
 End;
 
 (*
-	Returns the height of the text in WDC
+**	Returns the height of the text in WDC
 *)
 Function  gdTextHeight(text : String) : Real;
 Var	h : Word;
@@ -387,7 +375,7 @@ Begin
 End;
 
 (*
-	Returns the width of the text in WDC
+**	Returns the width of the text in WDC
 *)
 Function  gdTextWidth(text : String) : Real;
 Var	w : Word;

@@ -18,25 +18,21 @@ Procedure g3SetVPAngles(x, z : Real);
 Procedure g3CalcPoint(x, y, z : Real; VAR x2d : Real; VAR y2d : Real);
 Procedure g3GetVPCoords(VAR x, y, z : Real);
 
-(* ================================================================== *)
 Implementation
-
-(* === Global module variables/constants ============================ *)
+(* Η υλοποίηση του παραπάνω Interface *)
 
 Var
 	dist  : Real;	(* Απόσταση του σημείου παρατήρησης από την αρχή των αξόνων *)
 	depth : Real;	(* Συντελεστής προοπτικής
-						Θεωριτικά ειναι η απόσταση του παρατηρητή από
+						Θεωρητικά είναι η απόσταση του παρατηρητή από
 						το επίπεδο προβολή (δηλαδή η οθόνη) *)
-	x_angle : Real; (* Γωνία παρατηριτή με τον άξονα Χ *)
-	z_angle : Real; (* Γωνία παρατηριτή με τον άξονα Ζ *)
+	x_angle : Real; (* Γωνία παρατηρητή με τον άξονα Χ *)
+	z_angle : Real; (* Γωνία παρατηρητή με τον άξονα Ζ *)
 
 	cosx, cosz, sinx, sinz : Real; (* Βελτιστοποίηση ταχύτητας *)
 
-(* ================================================================== *)
-
 (*
-	Sets the view point - distance from 0, 0, 0
+**  Ορισμός της απόστασης του παρατηρητή από την αρχή των αξόνων
 *)
 Procedure g3SetVPDist(vp_dist : Real);
 Begin
@@ -44,7 +40,7 @@ Begin
 End;
 
 (*
-	Sets the view point - distance from screen
+**  Ορισμός της απόστασης του παρατηρητή από την οθόνη
 *)
 Procedure g3SetVPDepth(vp_depth : Real);
 Begin
@@ -52,10 +48,10 @@ Begin
 End;
 
 (*
-	Sets the view point - angles
-	gonies toy parathriti (se RAD)
-	z = gonia tou 0,0,0 - VP me ton aksona z
-	x = gonia tou 0,0,0 - VP me ton aksona X
+**  Ορισμός των γωνιών του παρατηρητή ως προς τους άξονες (σε RAD)
+**
+**	z = γωνία του κέντρου -> VP με τον άξονα Ζ
+**	x = γωνία του κέντρου -> VP με τον άξονα X
 *)
 Procedure g3SetVPAngles(x, z : Real);
 Begin
@@ -69,7 +65,7 @@ Begin
 End;
 
 (*
-**	Converts a 3d point to 2d
+**	Μετατροπή ενός 3Δ σημείου στη προβολή του στο επίπεδο (2Δ)
 *)
 Procedure g3CalcPoint(x, y, z : Real; VAR x2d : Real; VAR y2d : Real);
 Var
@@ -84,7 +80,7 @@ Begin
 End;
 
 (*
-**	Επιστρέφει τις συντεταγμένες του παρατηριτή (view point)
+**	Επιστρέφει τις συντεταγμένες του παρατηρητή (view point)
 *)
 Procedure g3GetVPCoords(VAR x, y, z : Real);
 Begin
