@@ -19,7 +19,6 @@
 
 Unit GrDev;	(* 8 letters for DOS (unit = filename) *)
 
-(* ========================================================================== *)
 Interface
 
 (* RectType, rectangle *)
@@ -71,32 +70,34 @@ Procedure gdSetWindow(index : Integer; VAR win : WindowType);
 Procedure gdSelectWindow(index : Integer);
 Procedure gdClearWindow;
 
-Procedure gdSelectPen(Pen : Integer);					(* Select pen *)
-Procedure gdLine(x1, y1, x2, y2 : Real);				(* Draw line *)
-Procedure gdRect(rc : RectType);							(* Draw rectangle *)
+Procedure gdSelectPen(Pen : Integer);				(* Select pen *)
+Procedure gdLine(x1, y1, x2, y2 : Real);			(* Draw line *)
+Procedure gdRect(rc : RectType);					(* Draw rectangle *)
 Procedure gdText(x, y : Real; text : String);		(* Draw text *)
 Function  gdTextHeight(text : String) : Real;		(* Returns the height of the text in WDC *)
-Function  gdTextWidth (text : String) : Real;		(*	Returns the width of the text in WDC *)
+Function  gdTextWidth (text : String) : Real;		(* Returns the width of the text in WDC *)
 
 Implementation
 (* --- Υλοποίηση --- *)
 
-Uses Graph;
+Uses sdl;
 
 Const MaxPen = 15;	(* The maximum number of pens *)
-Const MaxWin = 7;		(* The maximum number of windows *)
+Const MaxWin = 7;	(* The maximum number of windows *)
 
 Var
+	scr			: PSDL_Surface;
+
 	devCoords	: RectType;	(* minimum/maximum device coordinates *)
-	world		 	: RectType;	(* minimum/maximum world(user) coordinates *)
-	view		 	: RectType;	(* minimum/maximum viewport coordinates (wdc) *)
+	world		: RectType;	(* minimum/maximum world(user) coordinates *)
+	view		: RectType;	(* minimum/maximum viewport coordinates (wdc) *)
 
-	pens			: Array [0 .. MaxPen] of PenType;	(* array of pens *)
+	pens		: Array [0 .. MaxPen] of PenType;	(* array of pens *)
 
-	wins			: Array [0 .. MaxWin] of WindowType; (* array of windows *)
+	wins		: Array [0 .. MaxWin] of WindowType; (* array of windows *)
 
-	curr_pen		: Integer;	(* Current pen number *)
-	curr_win		: Integer;	(* Current window number *)
+	curr_pen	: Integer;	(* Current pen number *)
+	curr_win	: Integer;	(* Current window number *)
 
 	dev_lxy		: Real;		(* device x/y *)
 
@@ -109,7 +110,7 @@ Var
 *)
 Procedure gdError(msg : String);
 Begin
-	CloseGraph;
+	close...;
 	WriteLn('GraphDevice fatal error:');
 	WriteLn(msg);
 	Halt(1);	(* Fatal error - quit *)
@@ -129,18 +130,8 @@ Var
 Begin
 
 	(* initialize device driver *)
-
-	bgiDriver := Detect;
-	InitGraph(bgiDriver, bgiMode, '');
-	bgiError := GraphResult;
-
-	if bgiError <> grOK then 
-		Begin
-		WriteLn('GraphDevice::InitGraph failed.');
-		WriteLn('Graphics driver error: ', GraphErrorMsg(bgiError));
-		Halt(1);	(* fatal error - program exit *)
-		End;
-
+	init...
+		
 	(* initialize global variables *)
 	
 	devCoords.l := 0;
@@ -190,7 +181,7 @@ End;
 *)
 Procedure gdCloseDevice;
 Begin
-	CloseGraph;
+	close...;
 End;
 
 (*
