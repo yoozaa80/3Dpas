@@ -80,14 +80,12 @@ Function  gdTextWidth (text : String) : Real;		(* Returns the width of the text 
 Implementation
 (* --- Υλοποίηση --- *)
 
-Uses sdl;
+Uses Graph;
 
 Const MaxPen = 15;	(* The maximum number of pens *)
 Const MaxWin = 7;	(* The maximum number of windows *)
 
 Var
-	scr			: PSDL_Surface;
-
 	devCoords	: RectType;	(* minimum/maximum device coordinates *)
 	world		: RectType;	(* minimum/maximum world(user) coordinates *)
 	view		: RectType;	(* minimum/maximum viewport coordinates (wdc) *)
@@ -110,7 +108,7 @@ Var
 *)
 Procedure gdError(msg : String);
 Begin
-	close...;
+	CloseGraph;
 	WriteLn('GraphDevice fatal error:');
 	WriteLn(msg);
 	Halt(1);	(* Fatal error - quit *)
@@ -130,8 +128,17 @@ Var
 Begin
 
 	(* initialize device driver *)
-	init...
-		
+
+	bgiDriver := Detect;
+	InitGraph(bgiDriver, bgiMode, '');
+	bgiError := GraphResult;
+	
+	If bgiError <> grOK Then Begin
+		WriteLn('GraphDevice::InitGraph failed.');
+		WriteLn('Graphics driver error: ', GraphErrorMsg(bgiError));
+		Halt(1);        (* fatal error - program exit *)
+		End;
+
 	(* initialize global variables *)
 	
 	devCoords.l := 0;
@@ -181,7 +188,7 @@ End;
 *)
 Procedure gdCloseDevice;
 Begin
-	close...;
+	CloseGraph;
 End;
 
 (*
